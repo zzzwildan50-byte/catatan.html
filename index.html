@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Catatan Lucu Buat Kamu</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: #e0f7fa; /* Latar belakang biru pastel muda */
+      background-image: radial-gradient(#b2ebf2 1px, transparent 1px);
+      background-size: 20px 20px;
+      font-family: 'Comic Sans MS', 'Chalkboard SE', sans-serif;
+      overflow: hidden;
+      position: relative;
+    }
+
+  
+    #snow-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none;
+      z-index: 9999;
+    }
+
+    .snowflake {
+      position: absolute;
+      top: -30px;
+      user-select: none;
+      animation-name: fall, sway;
+      animation-timing-function: linear, ease-in-out;
+      animation-iteration-count: infinite, infinite;
+      animation-direction: normal, alternate;
+      white-space: nowrap;
+    }
+
+    @keyframes fall {
+      0% {
+        top: -10%;
+        opacity: 0;
+      }
+      10% {
+        opacity: 0.95;
+      }
+      90% {
+        opacity: 0.95;
+      }
+      100% {
+        top: 105%;
+        opacity: 0;
+      }
+    }
+
+    @keyframes sway {
+      0% {
+        transform: translateX(-20px) rotate(-10deg);
+      }
+      100% {
+        transform: translateX(30px) rotate(10deg);
+      }
+    }
+
+    
+    .click-heart {
+      position: fixed;
+      pointer-events: none;
+      z-index: 10000;
+      font-size: 22px;
+      animation: heartPop 0.8s ease-out forwards;
+    }
+
+    @keyframes heartPop {
+      0% {
+        transform: translate(-50%, -50%) scale(0.5);
+        opacity: 1;
+      }
+      100% {
+        transform: translate(-50%, -100px) scale(1.4);
+        opacity: 0;
+      }
+    }
+
+    
+    .book-container {
+      position: relative;
+      width: 350px;
+      height: 480px;
+      transition: transform 0.5s ease;
+      perspective: 1500px;
+      z-index: 10;
+    }
+
+    .book-container.is-open {
+      transform: translateX(50%);
+    }
+
+    
+    .paper {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      perspective: 1500px;
+      transform-origin: left center;
+      transition: transform 0.6s cubic-bezier(0.645, 0.045, 0.355, 1);
+      transform-style: preserve-3d;
+    }
+
+    .paper.flipped {
+      transform: rotateY(-180deg);
+    }
+
+    
+    .front, .back {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      background-color: #f4fbfd; /* Isi kertas putih kebiruan sangat lembut */
+      border-radius: 10px 20px 20px 10px;
+      box-shadow: 0 10px 20px rgba(130, 180, 210, 0.25);
+      backface-visibility: hidden;
+      padding: 25px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      border-left: 12px solid #4fc3f7; /* Jilid biru pastel */
+      cursor: pointer;
+    }
+
+    .back {
+      transform: rotateY(180deg);
+      border-left: none;
+      border-right: 12px solid #4fc3f7;
+      border-radius: 20px 10px 10px 20px;
+    }
+
+    
+    #p1 .front {
+      background-color: #81d4fa; /* Sampul biru muda pastel */
+      color: #01579b;
+      text-align: center;
+      align-items: center;
+      justify-content: center;
+    }
+
+    
+    h2 {
+      font-size: 22px;
+      color: #0288d1; /* Teks judul biru manis */
+      margin-bottom: 15px;
+      text-align: center;
+    }
+
+    #p1 .front h1 {
+      font-size: 24px;
+      margin-top: 15px;
+      color: #01579b;
+    }
+
+    p {
+      color: #37474f;
+      font-size: 14px;
+      line-height: 1.6;
+      text-align: center;
+    }
+
+    .btn-next {
+      align-self: center;
+      background: #29b6f6; /* Tombol biru pastel */
+      color: #ffffff;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-size: 12px;
+      cursor: pointer;
+      box-shadow: 0 4px 6px rgba(41, 182, 246, 0.4);
+      font-weight: bold;
+    }
+
+.icon-cat {   
+      width: 80px;
+      height: 80px;
+      background: #ffffff;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 40px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Container untuk Efek Salju, Nama WILDAN, dan Bunga -->
+  <div id="snow-container"></div>
+
+  <div class="book-container" id="book">
+    
+    <!-- Halaman 1: Cover & Halaman Pembuka -->
+    <div class="paper" id="p1" style="z-index: 3;">
+      <div class="front" onclick="flipPage(1, event)">
+        <div class="icon-cat">🐱</div>
+        <h1>Catatan Lucu Buat Kamu Meila Nur Syifa</h1>
+        <p style="color: #01579b; font-size: 12px; margin-top: 10px;">(Jangan diklik ya hee 😜)</p>
+        <button class="btn-next" style="margin-top: 30px;">Klik selanjutnya ➔</button>
+      </div>
+      <div class="back" onclick="flipPage(1, event)">
+        <h2>Halaman Pembuka 🌊</h2>
+        <p>"Hai Meila Nur Syifa! Sengaja bikin buku catatan model begini biar lucu, idenya cuma mau bilang makasih ya udah suka sama aku."</p>
+        <p><b>Yuk lanjut buka halaman berikutnya! 👉</b></p>
+        <span style="font-size: 10px; text-align: right; color: #b0bec5;">Halaman 1</span>
+      </div>
+    </div>
+
+    <!-- Halaman 2: Hal-hal Kecil & Sumpah Ya... -->
+    <div class="paper" id="p2" style="z-index: 2;">
+      <div class="front" onclick="flipPage(2, event)">
+        <h2>Awal suka sama kamu ✨</h2>
+        <p>"Aku suka sama kamu pas day 1 pkkmb di situ aku sudah suka sama kamu meii."</p>
+        <p>"disitu jugaa aku nyari ig sebelum kenal sama si hasby ga ketemu ketemu, terus aku mikir nyaa kamu udah punyaa cowo mei soalnya kamu cantik banget"</p>
+        <span style="font-size: 10px; text-align: right; color: #b0bec5;">Halaman 2</span>
+      </div>
+      <div class="back" onclick="flipPage(2, event)">
+        <h2>Sumpah Ya Meii aku suka sama kamu... 🤫</h2>
+        <p>"Awalnya, makin hari rasanya makin suka sama kamu."</p>
+        <p>"Semogaa bisaa bisa saama sama terus mei hee"</p>
+        <span style="font-size: 10px; text-align: right; color: #b0bec5;">Halaman 3</span>
+      </div>
+    </div>
+
+    <!-- Halaman 3: Janji Asli & The End -->
+    <div class="paper" id="p3" style="z-index: 1;">
+      <div class="front" onclick="flipPage(3, event)">
+        <h2>Intinya aku suka sama kamu 🤝</h2>
+        <p>"Meskipun aku kadang suka ngeselin,"</p>
+        <p>"Intinya, aku bakal suka sama kamu terus! meii"</p>
+        <span style="font-size: 10px; text-align: right; color: #b0bec5;">Halaman 4</span>
+      </div>
+      <div class="back" onclick="flipPage(3, event)">
+        <h2>The End 💎</h2>
+        <p>"Udah habis catatannya! Makasih ya udah baca sampe akhir. Semoga hari kamu secerah langit biru dan sehangat senyum kamu! Love you!"</p>
+        <button class="btn-next" onclick="event.stopPropagation(); flipPage(3, event)">Tutup Buku 📖</button>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    
+    function flipPage(pageNumber, event) {
+      if (event) {
+        createClickHeart(event.clientX, event.clientY);
+      }
+
+      const page = document.getElementById(`p${pageNumber}`);
+      page.classList.toggle("flipped");
+
+      const container = document.getElementById("book");
+      const allFlipped = document.querySelectorAll('.paper.flipped');
+
+      if (allFlipped.length > 0) {
+        container.classList.add("is-open");
+      } else {
+        container.classList.remove("is-open");
+      }
+
+      if (page.classList.contains("flipped")) {
+        setTimeout(() => {
+          page.style.zIndex = pageNumber;
+        }, 300);
+      } else {
+        setTimeout(() => {
+          page.style.zIndex = 5 - pageNumber;
+        }, 300);
+      }
+    }
+
+    
+    function createClickHeart(x, y) {
+      const clickItems = ['🤍', '🌷', '💐', '✨'];
+      const chosenItem = clickItems[Math.floor(Math.random() * clickItems.length)];
+      
+      const element = document.createElement('div');
+      element.classList.add('click-heart');
+      element.innerHTML = chosenItem;
+      element.style.left = `${x}px`;
+      element.style.top = `${y}px`;
+      document.body.appendChild(element);
+
+      setTimeout(() => {
+        element.remove();
+      }, 800);
+    }
+
+    
+    function createFallingElements() {
+      const snowContainer = document.getElementById('snow-container');
+      const particleCount = 55;
+      
+      
+      const shapes = ['WILDAN', '🌷', '💐', '🤍', '❄', '✨', '🤍', '🌷'];
+
+      for (let i = 0; i < particleCount; i++) {
+        const particle = document.createElement('div');
+        particle.classList.add('snowflake');
+
+        const shape = shapes[Math.floor(Math.random() * shapes.length)];
+        particle.innerHTML = shape;
+
+        const randomX = Math.random() * 100; // Posisi melintang
+        let size = Math.random() * 12 + 10;
+        
+        
+        if (shape === 'WILDAN') {
+          size = Math.random() * 4 + 13; // Ukuran font nama
+          particle.style.fontWeight = 'bold';
+          particle.style.letterSpacing = '1px';
+          particle.style.color = '#ffffff';
+          particle.style.textShadow = '0 0 10px rgba(1, 87, 155, 0.7)'; // Glow biru tua lembut
+        } else if (shape === '🌷' || shape === '💐') {
+          size = Math.random() * 8 + 16;
+        } else {
+          particle.style.color = '#ffffff';
+          particle.style.textShadow = '0 0 8px rgba(255, 255, 255, 0.9)';
+        }
+
+        const fallDuration = Math.random() * 7 + 6; // Kecepatan jatuh (6s - 13s)
+        const swayDuration = Math.random() * 3 + 2; // Kecepatan goyangan
+        const delay = Math.random() * 8;
+        const blur = Math.random() > 0.85 ? 'blur(1px)' : 'none';
+
+        particle.style.left = `${randomX}vw`;
+        particle.style.fontSize = `${size}px`;
+        particle.style.filter = blur;
+        particle.style.animationDuration = `${fallDuration}s, ${swayDuration}s`;
+        particle.style.animationDelay = `${delay}s, ${delay}s`;
+
+        snowContainer.appendChild(particle);
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', createFallingElements);
+  </script>
+</body>
+</html>
